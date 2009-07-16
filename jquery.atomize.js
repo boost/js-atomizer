@@ -1,3 +1,12 @@
+/*
+Script: jquery.atomizer.js
+
+License:
+	MIT license.
+
+Copyright:
+	Copyright (c) 2009 Boost New Media (http://boost.co.nz)
+*/
 jQuery.fn.atomize = function(text) {
   this.each(function() {
     var input = $(this);

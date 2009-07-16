@@ -1,3 +1,12 @@
+/*
+Script: moo.atomizer.js
+
+License:
+	MIT license.
+
+Copyright:
+	Copyright (c) 2009 Boost New Media (http://boost.co.nz)
+*/
 var Atomizer = new Class({
   initialize: function(input) {
     this.input = input;
