@@ -1,13 +1,13 @@
 /*
-Script: prototype.atomizer.js
+ Script: prototype.atomizer.js
 
-License:
-	MIT license.
+ License:
+ MIT license.
 
-Copyright:
-	Copyright (c) 2009 Boost New Media (http://boost.co.nz)
-*/
-var Atomizer = new Class({
+ Copyright:
+ Copyright (c) 2009 Boost New Media (http://boost.co.nz)
+ */
+var Atomizer = Class.create({
   initialize: function(input) {
     this.input = input;
     this.setup();
@@ -17,7 +17,7 @@ var Atomizer = new Class({
     this.text = this.input.getAttribute('rel');
     this.changed = true;
 
-    if(this.input.getValue() == "" || this.input.getValue() == this.text) {
+    if (this.input.getValue() == "" || this.input.getValue() == this.text) {
       this.changed = false;
       this.input.value = this.text;
       this.input.addClassName('atom');
@@ -30,25 +30,38 @@ var Atomizer = new Class({
   },
 
   focusHandler: function(event) {
-    if(!this.changed) this.input.setValue('');
+    if (!this.changed) this.input.setValue('');
     this.input.removeClassName('atom');
   },
 
   blurHandler: function(event) {
-    if(this.input.getValue() != '') this.changed = true;
-    if(!this.changed) this.input.value = this.text;
-    if(!this.changed) this.input.addClassName('atom');
+    if (this.input.getValue() != '') this.changed = true;
+    if (!this.changed) this.input.value = this.text;
+    if (!this.changed) this.input.addClassName('atom');
   },
 
   setupForm: function() {
     this.form = this.input.up('form');
-    if(this.form) {
+    if (this.form) {
+      // Observe the form
       this.form.observe('submit', this.formSubmitHandler.bindAsEventListener(this));
+      
+      // Replace the form's submit function so we can capture it
+      this.oldSubmit = this.form.submit;
+      this.form.submit = this.submitReplacement.bind(this);
     }
   },
 
+  // Handle the form submit event
   formSubmitHandler: function(event) {
-    if(!this.changed) this.input.value = "";
+    if (!this.changed) this.input.value = "";
+  },
+
+  // If form's submit method gets called by
+  // javascript, this function gets called instead.
+  submitReplacement: function() {
+    if (!this.changed) this.input.value = "";
+    this.oldSubmit.bind(this.form)();
   }
 });
 
@@ -56,7 +69,7 @@ Atomizer.atomizeInputs = function() {
   $$('input').each(function(input) {
     new Atomizer(input);
   });
-}
+};
 
 $(document).observe('dom:loaded', function() {
   Atomizer.atomizeInputs();
