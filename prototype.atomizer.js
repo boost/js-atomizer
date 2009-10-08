@@ -54,16 +54,20 @@ var Atomizer = Class.create({
     }
   },
 
+  hasChanged: function() {
+    return this.changed || (this.input.getValue() != '' && this.input.getValue() != this.text);
+  },
+
   // Handle the form submit event
   formSubmitHandler: function(event) {
-    if (!this.changed) this.input.value = "";
+    if (!this.hasChanged()) this.input.value = "";
   },
 
   // If form's submit method gets called by
   // javascript, this function gets called instead.
   submitReplacement: function() {
-    if (!this.changed) this.input.value = "";
-    this.oldSubmit.bind(this.form)();
+    if (!this.hasChanged()) this.input.value = "";
+    this.oldSubmit.apply(this.form);
   }
 });
 
