@@ -67,7 +67,11 @@ var Atomizer = Class.create({
   // javascript, this function gets called instead.
   submitReplacement: function() {
     if (!this.hasChanged()) this.input.value = "";
-    this.oldSubmit.apply(this.form);
+    try {
+      this.oldSubmit.apply(this.form);
+    } catch(e) {
+      this.oldSubmit();
+    }
   }
 });
 
